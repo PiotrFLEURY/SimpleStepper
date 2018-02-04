@@ -34,10 +34,16 @@ class MainActivity : AppCompatActivity(), StepperPageAdapter.StepFragmentProvide
         stepper_view.setOnStepChangeListener(this)
 
         previous_btn.setOnClickListener(this::previousStep)
+        error_btn.setOnClickListener(this::showError)
         next_btn.setOnClickListener(this::nextStep)
 
         stepper_view_pager.adapter = StepperPageAdapter(supportFragmentManager, stepper_view, this)
         stepper_view_pager.setOnTouchListener(this)
+    }
+
+    fun showError(v:View){
+        stepper_view.showMessage("Unable to do it !")
+        stepper_view.handler.postDelayed({ stepper_view.hideMessage() }, 1000)
     }
 
     fun previousStep(v: View){

@@ -2,15 +2,11 @@ package fr.piotr.simplestepper;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.support.annotation.Nullable;
-import android.support.v4.view.ViewPager;
+import android.support.v7.widget.CardView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewAnimationUtils;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -20,7 +16,7 @@ import android.widget.TextView;
  *
  */
 
-public class StepperView extends LinearLayout {
+public class StepperView extends CardView {
 
     public interface OnStepChangeListener {
         void onStepChange(int position);
@@ -34,6 +30,9 @@ public class StepperView extends LinearLayout {
     int currentPosition;
 
     private OnStepChangeListener onStepChangeListener;
+
+    LinearLayout stepperContainer;
+    TextView tvMessage;
 
     public StepperView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -57,22 +56,26 @@ public class StepperView extends LinearLayout {
         }
 
         LayoutInflater layoutInflater = LayoutInflater.from(context);
+        View contentView = layoutInflater.inflate(R.layout.stepper_layout, this, false);
+        stepperContainer = contentView.findViewById(R.id.stepper_container);
+        tvMessage = contentView.findViewById(R.id.stepper_message);
         for(int i=0;i<stepCount;i++){
             inflateStep(layoutInflater, i);
         }
+        addView(contentView);
 
         selectButton(currentPosition, false);
 
     }
 
     private void inflateStep(LayoutInflater layoutInflater, int i) {
-        View stepBubbleLayout = layoutInflater.inflate(R.layout.step_bubble, this, false);
+        View stepBubbleLayout = layoutInflater.inflate(R.layout.step_bubble, stepperContainer, false);
         View leftLine = stepBubbleLayout.findViewById(R.id.step_left_line);
         View rightLine = stepBubbleLayout.findViewById(R.id.step_right_line);
         ImageButton stepBubbleButton = stepBubbleLayout.findViewById(R.id.step_bubble_button);
         TextView stepBubbleTextView = stepBubbleLayout.findViewById(R.id.step_bubble_title);
 
-        addView(stepBubbleLayout);
+        stepperContainer.addView(stepBubbleLayout);
 
         if(isInEditMode()){
             stepBubbleTextView.setText(String.format(DEFAULT_STEP_TITLE, i+1));
@@ -110,7 +113,7 @@ public class StepperView extends LinearLayout {
     }
 
     public void setStepTitle(int position, String title) {
-        TextView tvTtitle = getChildAt(position).findViewById(R.id.step_bubble_title);
+        TextView tvTtitle = stepperContainer.getChildAt(position).findViewById(R.id.step_bubble_title);
         tvTtitle.setText(title);
     }
 
@@ -136,5 +139,16 @@ public class StepperView extends LinearLayout {
 
     public int getCurrentPosition() {
         return currentPosition;
+    }
+
+    public void showMessage(String message) {
+        stepperContainer.setVisibility(View.INVISIBLE);
+        tvMessage.setText(message);
+        tvMessage.setVisibility(View.VISIBLE);
+    }
+
+    public void hideMessage(){
+        tvMessage.setVisibility(View.INVISIBLE);
+        stepperContainer.setVisibility(View.VISIBLE);
     }
 }
