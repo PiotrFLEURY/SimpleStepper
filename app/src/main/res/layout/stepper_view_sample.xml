@@ -16,7 +16,6 @@
             android:padding="16dp"
             android:orientation="horizontal"
             android:gravity="center"
-            app:current_position="1"
             app:step_count="3"/>
 
     </android.support.v7.widget.CardView>

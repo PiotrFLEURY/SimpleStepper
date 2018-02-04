@@ -20,22 +20,7 @@ import android.widget.TextView;
  *
  */
 
-public class StepperView extends LinearLayout implements ViewPager.OnPageChangeListener {
-
-    @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-        selectButton(position, false);
-    }
-
-    @Override
-    public void onPageSelected(int position) {
-        selectButton(position, false);
-    }
-
-    @Override
-    public void onPageScrollStateChanged(int state) {
-        //
-    }
+public class StepperView extends LinearLayout {
 
     public interface OnStepChangeListener {
         void onStepChange(int position);
@@ -61,7 +46,11 @@ public class StepperView extends LinearLayout implements ViewPager.OnPageChangeL
         try {
 
             stepCount = a.getInteger(R.styleable.StepperView_step_count, DEFAULT_STEP_COUNT);
-            currentPosition = a.getInteger(R.styleable.StepperView_current_position, DEFAULT_CURRENT_POSITION);
+            if(isInEditMode()) {
+                currentPosition = a.getInteger(R.styleable.StepperView_current_position, DEFAULT_CURRENT_POSITION);
+            } else {
+                currentPosition = 0;
+            }
 
         } finally {
             a.recycle();
@@ -71,6 +60,8 @@ public class StepperView extends LinearLayout implements ViewPager.OnPageChangeL
         for(int i=0;i<stepCount;i++){
             inflateStep(layoutInflater, i);
         }
+
+        selectButton(currentPosition, false);
 
     }
 
@@ -84,13 +75,6 @@ public class StepperView extends LinearLayout implements ViewPager.OnPageChangeL
         addView(stepBubbleLayout);
 
         if(isInEditMode()){
-            if(i<currentPosition) {
-                stepBubbleButton.setSelected(true);
-            } else if(i==currentPosition){
-                stepBubbleButton.setPressed(true);
-            } else if(i>currentPosition) {
-                stepBubbleButton.setEnabled(false);
-            }
             stepBubbleTextView.setText(String.format(DEFAULT_STEP_TITLE, i+1));
         }
 

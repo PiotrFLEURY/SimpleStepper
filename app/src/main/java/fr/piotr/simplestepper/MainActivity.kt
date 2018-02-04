@@ -3,10 +3,14 @@ package fr.piotr.simplestepper
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
+import android.view.MotionEvent
 import android.view.View
 import kotlinx.android.synthetic.main.stepper_view_sample.*
 
-class MainActivity : AppCompatActivity(), StepperPageAdapter.StepFragmentProvider, StepperView.OnStepChangeListener{
+class MainActivity : AppCompatActivity(), StepperPageAdapter.StepFragmentProvider, StepperView.OnStepChangeListener, View.OnTouchListener{
+    override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+        return true
+    }
 
     override fun onStepChange(position: Int) {
         stepper_view_pager.setCurrentItem(position, true)
@@ -33,7 +37,7 @@ class MainActivity : AppCompatActivity(), StepperPageAdapter.StepFragmentProvide
         next_btn.setOnClickListener(this::nextStep)
 
         stepper_view_pager.adapter = StepperPageAdapter(supportFragmentManager, stepper_view, this)
-        stepper_view_pager.addOnPageChangeListener(stepper_view)
+        stepper_view_pager.setOnTouchListener(this)
     }
 
     fun previousStep(v: View){
@@ -42,5 +46,13 @@ class MainActivity : AppCompatActivity(), StepperPageAdapter.StepFragmentProvide
 
     fun nextStep(v: View){
         stepper_view.nextStep()
+    }
+
+    override fun onBackPressed() {
+        if(stepper_view.currentPosition>0){
+            stepper_view.previousStep()
+        } else {
+            super.onBackPressed()
+        }
     }
 }
