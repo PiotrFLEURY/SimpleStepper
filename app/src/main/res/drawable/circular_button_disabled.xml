@@ -4,8 +4,7 @@
         <shape
             android:shape="oval">
             <size android:height="24sp" android:width="24sp"/>
-            <solid android:color="@color/colorPrimary" />
+            <solid android:color="@android:color/darker_gray" />
         </shape>
     </item>
-    <item android:drawable="@drawable/ic_more_horiz_white_24dp" />
 </layer-list>

@@ -3,21 +3,44 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="0dp"
+    android:layout_weight="1"
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:layout_marginStart="16dp"
-    android:layout_marginEnd="16dp"
-    android:padding="24dp">
+    tools:showIn="@layout/sample_linear_layout">
 
-    <ImageButton
-        android:id="@+id/step_bubble_button"
-        android:layout_width="24sp"
-        android:layout_height="24sp"
-        android:background="@drawable/circular_button_selector"
-        android:textColor="@android:color/white"
-        tools:text="1" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <View
+            android:id="@+id/step_left_line"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="1dp"
+            android:layout_marginEnd="8dp"
+            android:background="@android:color/darker_gray"/>
+
+        <ImageButton
+            android:id="@+id/step_bubble_button"
+            android:layout_width="24sp"
+            android:layout_height="24sp"
+            android:background="@drawable/circular_button_selector"
+            android:textColor="@android:color/white"
+            tools:text="1" />
+
+        <View
+            android:id="@+id/step_right_line"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="1dp"
+            android:layout_marginStart="8dp"
+            android:background="@android:color/darker_gray"/>
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/step_bubble_title"

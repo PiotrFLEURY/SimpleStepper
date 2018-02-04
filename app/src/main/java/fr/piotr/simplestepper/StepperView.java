@@ -10,6 +10,7 @@ import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -68,37 +69,52 @@ public class StepperView extends LinearLayout implements ViewPager.OnPageChangeL
 
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         for(int i=0;i<stepCount;i++){
-            View stepBubbleLayout = layoutInflater.inflate(R.layout.step_bubble, this, false);
-            ImageButton stepBubbleButton = stepBubbleLayout.findViewById(R.id.step_bubble_button);
-            TextView stepBubbleTextView = stepBubbleLayout.findViewById(R.id.step_bubble_title);
-
-            addView(stepBubbleLayout);
-
-            if(isInEditMode()){
-                if(i<currentPosition) {
-                    stepBubbleButton.setSelected(true);
-                } else if(i==currentPosition){
-                    stepBubbleButton.setPressed(true);
-                }
-                stepBubbleTextView.setText(String.format(DEFAULT_STEP_TITLE, i+1));
-            }
-
-            stepBubbleButton.setTag(i);
-            stepBubbleButton.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    selectButton((Integer) v.getTag(), true);
-                }
-            });
-
+            inflateStep(layoutInflater, i);
         }
 
     }
 
+    private void inflateStep(LayoutInflater layoutInflater, int i) {
+        View stepBubbleLayout = layoutInflater.inflate(R.layout.step_bubble, this, false);
+        View leftLine = stepBubbleLayout.findViewById(R.id.step_left_line);
+        View rightLine = stepBubbleLayout.findViewById(R.id.step_right_line);
+        ImageButton stepBubbleButton = stepBubbleLayout.findViewById(R.id.step_bubble_button);
+        TextView stepBubbleTextView = stepBubbleLayout.findViewById(R.id.step_bubble_title);
+
+        addView(stepBubbleLayout);
+
+        if(isInEditMode()){
+            if(i<currentPosition) {
+                stepBubbleButton.setSelected(true);
+            } else if(i==currentPosition){
+                stepBubbleButton.setPressed(true);
+            } else if(i>currentPosition) {
+                stepBubbleButton.setEnabled(false);
+            }
+            stepBubbleTextView.setText(String.format(DEFAULT_STEP_TITLE, i+1));
+        }
+
+        stepBubbleButton.setTag(i);
+        stepBubbleButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectButton((Integer) v.getTag(), true);
+            }
+        });
+
+        if(i==0){
+            leftLine.setVisibility(INVISIBLE);
+        } else if(i==stepCount-1){
+            rightLine.setVisibility(INVISIBLE);
+        }
+    }
+
     private void selectButton(int tag, boolean notify) {
         for(int i=0;i<stepCount;i++){
-            findViewWithTag(i).setSelected(i<tag);
-            findViewWithTag(i).setPressed(i==tag);
+            View viewWithTag = findViewWithTag(i);
+            viewWithTag.setSelected(i<tag);
+            viewWithTag.setPressed(i==tag);
+            viewWithTag.setEnabled(i<=tag);
         }
         currentPosition = tag;
         if(notify && onStepChangeListener!=null){
