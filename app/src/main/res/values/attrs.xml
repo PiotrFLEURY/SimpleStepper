@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="StepperView">
+        <attr name="step_count" format="integer" />
+        <attr name="current_position" format="integer" />
+    </declare-styleable>
+</resources>
