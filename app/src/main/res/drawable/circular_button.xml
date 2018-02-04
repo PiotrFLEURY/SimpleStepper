@@ -7,10 +7,10 @@
             <solid android:color="@color/colorPrimary" />
         </shape>
     </item>
-    <item android:left="10sp"
-        android:top="10sp"
-        android:right="10sp"
-        android:bottom="10sp">
+    <item android:left="11sp"
+        android:top="11sp"
+        android:right="11sp"
+        android:bottom="11sp">
         <shape
             android:shape="oval">
             <solid android:color="@android:color/white" />
