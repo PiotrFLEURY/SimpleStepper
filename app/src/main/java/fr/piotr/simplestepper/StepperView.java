@@ -94,11 +94,14 @@ public class StepperView extends LinearLayout {
     }
 
     private void selectButton(int tag, boolean notify) {
+        findViewWithTag(currentPosition).animate().scaleX(1f).scaleY(1f).alpha(0.8f).start();
         for(int i=0;i<stepCount;i++){
             View viewWithTag = findViewWithTag(i);
             viewWithTag.setSelected(i<tag);
-            viewWithTag.setPressed(i==tag);
             viewWithTag.setEnabled(i<=tag);
+            if(i==tag){
+                viewWithTag.animate().scaleX(1.2f).scaleY(1.2f).alpha(1f).start();
+            }
         }
         currentPosition = tag;
         if(notify && onStepChangeListener!=null){
